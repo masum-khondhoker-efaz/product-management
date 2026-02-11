@@ -14,6 +14,7 @@ A scalable RESTful API for an e-commerce platform built with Node.js, Express, T
 - [Key Architectural Decisions](#key-architectural-decisions)
 - [Assumptions Made](#assumptions-made)
 - [Deployment](#deployment)
+- [Postman](#https://documenter.getpostman.com/view/39636095/2sBXcAKiy1)
 - [License](#license)
 
 ## 🚀 Tech Stack
