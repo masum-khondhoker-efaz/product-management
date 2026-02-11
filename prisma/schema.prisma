@@ -1,0 +1,192 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                         String       @id @default(auto()) @map("_id") @db.ObjectId
+  fullName                   String
+  email                      String       @unique
+  password                   String?
+  role                       UserRoleEnum @default(CUSTOMER)
+  status                     UserStatus   @default(PENDING)
+  isVerified                 Boolean      @default(false)
+  isProfileComplete          Boolean      @default(false)
+  address                    String?
+  isLoggedIn                 Boolean      @default(false)
+  bio                        String?
+  image                      String?
+  phoneNumber                String?
+  dateOfBirth                String?
+  gender                     String?
+  fcmToken                   String?
+  fcmTokenEx                 String?
+  isDeleted                  Boolean      @default(false)
+  isVerifiedForPasswordReset Boolean      @default(false)
+  fraudScore                 Int          @default(0) // Track fraudulent behavior
+  canceledOrdersCount        Int          @default(0) // Track canceled orders
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  admin      Admin?
+  cartItems  Cart[]
+  orders     Order[]
+  payments   Payment[]
+  products   Product[]
+  orderItems OrderItem[]
+
+  @@map("users")
+}
+
+model Admin {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String       @unique @db.ObjectId
+  role         UserRoleEnum @default(SUPER_ADMIN)
+  isSuperAdmin Boolean      @default(false)
+  systemOwner  Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // Relationships
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("admins")
+}
+
+model Product {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  name        String
+  description String?
+  price       Float
+  stock       Int      @default(0)
+  category    String?
+  image       String?
+  isDeleted   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  user       User        @relation(fields: [userId], references: [id])
+  cartItems  Cart[]
+  orderItems OrderItem[]
+
+  @@map("products")
+}
+
+model Cart {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  productId String   @db.ObjectId
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([userId, productId])
+  @@map("carts")
+}
+
+model Order {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String        @db.ObjectId
+  orderNumber     String        @unique
+  totalAmount     Float
+  status          OrderStatus   @default(PENDING)
+  shippingAddress String
+  paymentStatus   PaymentStatus @default(PENDING)
+  notes           String?
+  canceledAt      DateTime?
+  cancelReason    String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relationships
+  user       User        @relation(fields: [userId], references: [id])
+  orderItems OrderItem[]
+  payment    Payment?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  orderId   String   @db.ObjectId
+  productId String   @db.ObjectId
+  quantity  Int
+  price     Float // Price at the time of order
+  subtotal  Float // quantity * price
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  user    User    @relation(fields: [userId], references: [id])
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+model Payment {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  orderId       String        @unique @db.ObjectId
+  userId        String        @db.ObjectId
+  amount        Float
+  paymentMethod PaymentMethod @default(CASH_ON_DELIVERY)
+  transactionId String?       @unique
+  status        PaymentStatus @default(PENDING)
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relationships
+  order Order @relation(fields: [orderId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@map("payments")
+}
+
+enum UserRoleEnum {
+  ADMIN
+  SUPER_ADMIN
+  CUSTOMER
+}
+
+enum UserStatus {
+  ACTIVE
+  PENDING
+  BLOCKED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CASH_ON_DELIVERY
+  CREDIT_CARD
+  DEBIT_CARD
+  MOBILE_PAYMENT
+}
