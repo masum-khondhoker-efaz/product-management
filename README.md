@@ -659,7 +659,7 @@ Add all environment variables from `.env` file to your Vercel project settings:
 ### Post-Deployment
 
 After deployment:
-1. Run Prisma migrations/push to production database
+1. Run Prisma push to production database
 2. Verify all environment variables are set
 3. Test critical endpoints (auth, payments)
 4. Set up monitoring and logging
