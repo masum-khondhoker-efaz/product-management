@@ -102,7 +102,6 @@ A scalable RESTful API for an e-commerce platform built with Node.js, Express, T
   - User verification status
   - Fraud detection (fraud score tracking)
   - Canceled order tracking
-  - User blocking and management
 
 - 🔒 **Security Features**
   - Rate limiting
@@ -247,14 +246,14 @@ erDiagram
 ### Prerequisites
 
 - **Node.js** (v18 or higher)
-- **npm** or **yarn**
+- **npm**
 - **MongoDB** database (local or cloud instance like MongoDB Atlas)
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/masum-khondhoker-efaz/product-management
    cd Mini-E-Commerce-API
    ```
 
@@ -332,11 +331,6 @@ The server will start on `http://localhost:5000` (or the port specified in your 
 
 ### Database Management
 
-**Open Prisma Studio** (Database GUI):
-```bash
-npx prisma studio
-```
-
 **Update database schema** after modifying `schema.prisma`:
 ```bash
 npx prisma db push
@@ -376,7 +370,7 @@ http://localhost:5000/api/v1
 Most endpoints require authentication. Include the JWT token in the Authorization header:
 
 ```
-Authorization: Bearer <your-jwt-token>
+Authorization: <your-jwt-token>
 ```
 
 ## 📁 Project Structure
@@ -447,7 +441,7 @@ Mini E-Commerce API/
   - Stateless authentication (no server-side session storage)
   - Scalable for distributed systems
   - Mobile-friendly
-- **Security**: Short-lived access tokens (7 days) with longer refresh tokens (365 days)
+- **Security**: Short-lived access tokens (1 day) with longer refresh tokens (365 days)
 
 ### 6. **Layered Architecture (MVC + Service Layer)**
 - **Decision**: Separate concerns into Controllers → Services → Prisma (Data Access)
@@ -513,24 +507,7 @@ Mini E-Commerce API/
   - Track payment status independently
   - Support payment history
 
-### 14. **Real-time Communication Ready**
-- **Decision**: Include Socket.io for WebSocket support
-- **Rationale**: 
-  - Real-time order status updates
-  - Live notifications
-  - Admin dashboard updates
-  - Future chat support
-- **Status**: Infrastructure ready, implementation pending
-
-### 15. **Multi-Cloud Storage Support**
-- **Decision**: Support both Cloudinary and AWS S3
-- **Rationale**:
-  - Flexibility based on project requirements
-  - Cost optimization options
-  - Redundancy and failover capabilities
-- **Use Cases**: Product images, user avatars, generated PDFs
-
-### 16. **Serverless Deployment (Vercel)**
+### 14. **Serverless Deployment (Vercel)**
 - **Decision**: Deploy on Vercel instead of traditional VPS/containers
 - **Rationale**:
   - Zero configuration deployment
