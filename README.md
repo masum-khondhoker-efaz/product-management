@@ -1,6 +1,6 @@
 # Mini E-Commerce API
 
-A scalable RESTful API for an e-commerce platform built with Node.js, Express, TypeScript, and MongoDB. This API provides comprehensive functionality for managing products, users, shopping carts, orders, and payments with integrated Stripe payment processing.
+A scalable RESTful API for an e-commerce platform built with Node.js, Express, TypeScript, and MongoDB. This API provides comprehensive functionality for managing products, users, shopping carts, orders, and payments with demo payment processing.
 
 ## 📋 Table of Contents
 
@@ -34,22 +34,11 @@ A scalable RESTful API for an e-commerce platform built with Node.js, Express, T
 - **express-rate-limit** - Rate limiting for API protection
 - **CORS** - Cross-origin resource sharing
 
-### Payment Processing
-- **Stripe** - Payment gateway integration
 
-### Email & Notifications
+
+### Email
 - **Nodemailer** - Email sending capabilities
-- **Firebase Admin** - Push notifications (FCM)
 
-### File & Media Handling
-- **Multer** - File upload middleware
-- **Cloudinary** - Cloud-based image storage
-- **AWS S3** - Cloud storage
-- **PDFKit** - PDF generation
-- **fluent-ffmpeg** - Video/media processing
-
-### Real-time Communication
-- **Socket.io** - WebSocket for real-time features
 
 ### Validation & Error Handling
 - **Zod** - Schema validation
@@ -80,7 +69,6 @@ A scalable RESTful API for an e-commerce platform built with Node.js, Express, T
 
 - 🛍️ **Product Management**
   - CRUD operations for products
-  - Image upload and storage
   - Category management
   - Stock tracking
   - Soft delete functionality
@@ -100,7 +88,6 @@ A scalable RESTful API for an e-commerce platform built with Node.js, Express, T
 
 - 💳 **Payment Processing**
   - Multiple payment methods (Cash on Delivery, Credit/Debit Card, Mobile Payment)
-  - Stripe integration
   - Payment status tracking
   - Transaction ID management
   - Refund support
@@ -257,9 +244,6 @@ erDiagram
 - **Node.js** (v18 or higher)
 - **npm** or **yarn**
 - **MongoDB** database (local or cloud instance like MongoDB Atlas)
-- **Stripe Account** (for payment processing)
-- **Cloudinary Account** (optional, for image storage)
-- **AWS S3** (optional, for file storage)
 
 ### Installation
 
@@ -365,9 +349,6 @@ npx prisma db push
 | `BCRYPT_SALT_ROUNDS` | Number of salt rounds for bcrypt | Yes |
 | `EMAIL` | Email address for sending emails | Yes |
 | `APP_PASS` | App-specific password for email | Yes |
-| `STRIPE_SECRET_KEY` | Stripe secret key | Yes (for payments) |
-| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name | Optional |
-| `AWS_ACCESS_KEY_ID` | AWS access key | Optional |
 
 ## 📚 API Documentation
 
@@ -525,8 +506,7 @@ Mini E-Commerce API/
 - **Rationale**:
   - Flexibility to add new payment providers
   - Track payment status independently
-  - Support refunds and payment history
-- **Current Integration**: Stripe with extensibility for other gateways
+  - Support payment history
 
 ### 14. **Real-time Communication Ready**
 - **Decision**: Include Socket.io for WebSocket support
@@ -545,15 +525,7 @@ Mini E-Commerce API/
   - Redundancy and failover capabilities
 - **Use Cases**: Product images, user avatars, generated PDFs
 
-### 16. **Firebase Cloud Messaging (FCM) Integration**
-- **Decision**: Track FCM tokens for push notifications
-- **Rationale**:
-  - Mobile app support
-  - Order status notifications
-  - Marketing campaigns
-  - Multi-device notification support (`fcmToken`, `fcmTokenEx`)
-
-### 17. **Serverless Deployment (Vercel)**
+### 16. **Serverless Deployment (Vercel)**
 - **Decision**: Deploy on Vercel instead of traditional VPS/containers
 - **Rationale**:
   - Zero configuration deployment
@@ -623,10 +595,7 @@ Mini E-Commerce API/
    - File uploads are limited by platform constraints
 
 10. **Third-Party Services**
-    - Stripe API is always available
     - Email service (SMTP) is configured correctly
-    - Cloudinary/S3 have sufficient storage quota
-    - Firebase project is set up for FCM
 
 11. **Deployment**
     - Application is deployed on Vercel (serverless)
