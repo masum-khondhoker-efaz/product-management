@@ -58,6 +58,7 @@ A scalable RESTful API for an e-commerce platform built with Node.js, Express, T
 
 ### Deployment
 - **Vercel** - Serverless deployment platform
+- **Vercel-URL** - https://documenter.getpostman.com/view/39636095/2sBXcAKiy1
 
 ### Postman
 - **URL** - https://documenter.getpostman.com/view/39636095/2sBXcAKiy1
